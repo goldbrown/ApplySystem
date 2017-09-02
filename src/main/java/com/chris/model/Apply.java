@@ -4,13 +4,12 @@ import java.util.Date;
 
 public class Apply {
 	private int applyId;
-	private int periodId;
-	private int companyId;
+	private String periodName;
+	private String companyName;
 	private int userId;
 	private Date applyDate;
 	private Date endDate;
 	private String recommend;
-	private String recommendRemark;
 	private String status;
 	private String anticipate;
 	private String result;
@@ -20,17 +19,17 @@ public class Apply {
 	public void setApplyId(int applyId) {
 		this.applyId = applyId;
 	}
-	public int getPeriodId() {
-		return periodId;
+	public String getPeriodName() {
+		return periodName;
 	}
-	public void setPeriodId(int periodId) {
-		this.periodId = periodId;
+	public void setPeriodName(String periodName) {
+		this.periodName = periodName;
 	}
-	public int getCompanyId() {
-		return companyId;
+	public String getCompanyName() {
+		return companyName;
 	}
-	public void setCompanyId(int companyId) {
-		this.companyId = companyId;
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 	public int getUserId() {
 		return userId;
@@ -56,12 +55,6 @@ public class Apply {
 	public void setRecommend(String recommend) {
 		this.recommend = recommend;
 	}
-	public String getRecommendRemark() {
-		return recommendRemark;
-	}
-	public void setRecommendRemark(String recommendRemark) {
-		this.recommendRemark = recommendRemark;
-	}
 	public String getStatus() {
 		return status;
 	}
@@ -80,5 +73,6 @@ public class Apply {
 	public void setResult(String result) {
 		this.result = result;
 	}
+	
 	
 }

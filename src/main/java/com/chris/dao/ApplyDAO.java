@@ -16,24 +16,27 @@ import com.chris.model.Apply;
 public interface ApplyDAO {
 	
 	String TABLE_NAME = " apply ";
-	String INSERT_FIELD = " period_id, company_id, user_id, apply_date,"
-			+ " end_date, recommend, recommend_remark, status, anticipate, result ";
+	String INSERT_FIELD = " period_name, company_name, user_id, apply_date,"
+			+ " end_date, recommend, status, anticipate, result ";
 	String SELECT_FIELD = " apply_id, " + INSERT_FIELD;
 	
 	@Insert({" insert into ", TABLE_NAME, " ( ", INSERT_FIELD,  " ) values ( ", 
-		"(#{periodId}, #{companyId}, #{userId}, #{applyDate}, #{endDate}, #{recommend},"
-		+ "#{recommend_remark}, #{status}, #{anticipate}, #{result})"})
+		"#{periodName}, #{companyName}, #{userId}, #{applyDate}, #{endDate}, #{recommend},"
+		+ " #{status}, #{anticipate}, #{result})"})
 	public int addApply(Apply apply);
 	
 	@Select({"select ", SELECT_FIELD, " from ", TABLE_NAME, " where mail = #{mail}"})
 	public List<Apply> selectByMail(String mail);
 	
-	@Update({"update ", TABLE_NAME, " set period_id = #{periodId}, company_id = #{companyId},"
+	@Update({"update ", TABLE_NAME, " set period_name = #{periodName}, company_name = #{company_name},"
 			+ "user_id = #{userId}, apply_date = #{applyDate}, end_date = #{applyDate},"
-			+ "recommend = #{recommend}, recommendRemark = #{recommendRemark},"
+			+ "recommend = #{recommend},"
 			+ "status = #{status}, anticipate = #{anticipate}, result = #{result} where apply_id = #{applyId}"})
 	public void updateApply(Apply apply);
 	
 	@Delete({"delete from ", TABLE_NAME, " where apply_id = #{applyId}"})
 	public void deleteApply(int applyId);
+	
+	@Delete({"delete from ", TABLE_NAME, " where apply_id in #{applyIds}"})
+	public void deleteApplyList(List<Integer> applyIds);
 }
