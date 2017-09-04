@@ -17,8 +17,8 @@ public class ApplyService {
 		return applyDAO.addApply(apply);
 	}
 	
-	public List<Apply> selectByMail(String mail) {
-		return applyDAO.selectByMail(mail);
+	public List<Apply> selectByUserId(int userId) {
+		return applyDAO.selectByUserId(userId);
 	}
 	
 	public void updateApply(Apply apply) {

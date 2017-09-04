@@ -33,13 +33,14 @@ public class LoginController {
 	@RequestMapping(path = "/reg", method = RequestMethod.POST)
 	@ResponseBody
     public String reg(Model model,
-                      @RequestParam("mail") String mail,
+    				  @RequestParam(value = "username") String username,
+                      @RequestParam(value = "mail", required = false) String mail,
                       @RequestParam("password") String password,  
                       HttpServletRequest request,
                       HttpServletResponse response) {
         try {
         	String ipAddr = request.getRemoteAddr();
-            Map<String, Object> map = userService.register(mail, password, ipAddr);
+            Map<String, Object> map = userService.register(username, password, ipAddr);
             return "成功注册";
         } catch (Exception e) {
             logger.error("注册异常" + e.getMessage());
@@ -48,13 +49,15 @@ public class LoginController {
     }
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@ResponseBody
     public String login(Model model,
-                        @RequestParam("mail") String mail,
+    					@RequestParam("username") String username,
+                        @RequestParam(value = "mail", required = false) String mail,
                         @RequestParam("password") String password,
                         HttpServletRequest request,
                         HttpServletResponse response) {
-            Map<String, Object> map = userService.login(mail, password);
-            return "redirect:/";
+            Map<String, Object> map = userService.login(username, password);
+            return "OK";
            
     }
 	

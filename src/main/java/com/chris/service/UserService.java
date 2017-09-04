@@ -21,28 +21,32 @@ public class UserService {
 		User user = userDAO.selectById(userId);
 		return user;
 	}
-	public User getUser(String mail) {
+	public User getUserByMail(String mail) {
 		User user = userDAO.selectByMail(mail);
 		return user;
 	}
+	public User getUserByUsername(String username) {
+		User user = userDAO.selectByUsername(username);
+		return user;
+	}
 	
-	public Map<String, Object> register(String mail, String password, String ipAddr) {
+	public Map<String, Object> register(String username, String password, String ipAddr) {
 		Map<String, Object> map = new HashMap<>();
-		if(StringUtils.isBlank(mail)) {
-			map.put("msg", "email为空");
+		if(StringUtils.isBlank(username)) {
+			map.put("msg", "用户名为空");
 			return map;
 		}
 		if(StringUtils.isBlank(password)) {
 			map.put("msg", "密码为空");
 			return map;
 		}
-		User user = getUser(mail);
+		User user = getUserByUsername(username);
 		if(user != null) {
-			map.put("msg", "用户的email已经被注册过");
+			map.put("msg", "用户名已经被注册过");
 			return map;
 		}
 		user = new User();
-        user.setMail(mail);
+        user.setUsername(username);
         user.setSalt(UUID.randomUUID().toString().substring(0, 5));
         user.setPassword(ApplySystemUtils.md5(password + user.getSalt()));
         user.setIpAddr(ipAddr);
@@ -52,25 +56,25 @@ public class UserService {
 		return map;
 	}
 	
-    public Map<String, Object> login(String mail, String password) {
+    public Map<String, Object> login(String username, String password) {
         Map<String, Object> map = new HashMap<>();
-        if(StringUtils.isBlank(mail)) {
-            map.put("msg", "错误：邮箱为空!");
+        if(StringUtils.isBlank(username)) {
+            map.put("msg", "错误：用户名为空!");
             return map;
         }
         if (StringUtils.isBlank(password)) {
             map.put("msg", "错误：密码为空！");
             return map;
         }
-        User user = userDAO.selectByMail(mail);
+        User user = userDAO.selectByUsername(username);
 
-        if(!mail.equals(user.getMail())
+        if(!username.equals(user.getUsername())
                 || !ApplySystemUtils.md5(password + user.getSalt()).equals(user.getPassword())) {
-            map.put("msg", "邮箱或者密码不正确！");
+            map.put("msg", "用户名或者密码不正确！");
             return map;
         }
         //Each time login, store a temp ticket(token) for this session, which will expire soon
-        int userId = getUser(mail).getUserId();
+        int userId = getUserByUsername(username).getUserId();
         map.put("userId", userId);
         return map;
     }

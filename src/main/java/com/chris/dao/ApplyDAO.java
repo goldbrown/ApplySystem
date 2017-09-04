@@ -25,10 +25,10 @@ public interface ApplyDAO {
 		+ " #{status}, #{anticipate}, #{result})"})
 	public int addApply(Apply apply);
 	
-	@Select({"select ", SELECT_FIELD, " from ", TABLE_NAME, " where mail = #{mail}"})
-	public List<Apply> selectByMail(String mail);
+	@Select({"select ", SELECT_FIELD, " from ", TABLE_NAME, " where user_id = #{userId}"})
+	public List<Apply> selectByUserId(int userId);
 	
-	@Update({"update ", TABLE_NAME, " set period_name = #{periodName}, company_name = #{company_name},"
+	@Update({"update ", TABLE_NAME, " set period_name = #{periodName}, company_name = #{companyName},"
 			+ "user_id = #{userId}, apply_date = #{applyDate}, end_date = #{applyDate},"
 			+ "recommend = #{recommend},"
 			+ "status = #{status}, anticipate = #{anticipate}, result = #{result} where apply_id = #{applyId}"})
@@ -37,6 +37,6 @@ public interface ApplyDAO {
 	@Delete({"delete from ", TABLE_NAME, " where apply_id = #{applyId}"})
 	public void deleteApply(int applyId);
 	
-	@Delete({"delete from ", TABLE_NAME, " where apply_id in #{applyIds}"})
+	@Delete({"delete from ", TABLE_NAME, " where apply_id in (#{applyIds})"})
 	public void deleteApplyList(List<Integer> applyIds);
 }
