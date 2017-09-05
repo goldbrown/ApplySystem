@@ -2,6 +2,7 @@ package com.chris.controller;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,8 +14,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +32,8 @@ import com.chris.model.User;
 import com.chris.service.ApplyService;
 import com.chris.service.UserService;
 
+//@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin
 @Controller
 public class ApplyController {
 	@Autowired
@@ -33,23 +41,24 @@ public class ApplyController {
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping(path = "/apply/add", method = RequestMethod.POST)
+	@RequestMapping(path = "/apply/add")
 	@ResponseBody
 	public String addApply(Model model, 
-			 @RequestParam("user_id") int userId,
-			 @RequestParam("mail") String mail,
-             @RequestParam("period_name") String periodName,
-             @RequestParam("company_name") String companyName,
-             @RequestParam("apply_date") String applyDate,
-             @RequestParam(value = "end_date", required = false) String endDate,
-             @RequestParam("recommend") String recommend,
+			 @RequestParam(value = "userId") int userId,
+             @RequestParam(value = "periodName", required = false) String periodName,
+             @RequestParam("companyName") String companyName,
+             @RequestParam("applyDate") String applyDate,
+             @RequestParam(value = "endDate", required = false) String endDate,
+             @RequestParam(value = "recommend", required = false) String recommend,
              @RequestParam("status") String status,
              @RequestParam(value = "anticipate", required = false) String anticipate,
              @RequestParam(value = "result", required = false) String result,
              HttpServletRequest request,
              HttpServletResponse response) throws ParseException {
 		Apply apply = new Apply();
-		apply.setUserId(userId);
+		apply.setUserId(Integer.valueOf(userId));
+		User user = userService.getUser(userId);
+		apply.setUsername(user.getUsername());
 		apply.setPeriodName(periodName);
 		apply.setCompanyName(companyName);
 		apply.setApplyDate(DateUtils.parseDate(applyDate, "yyyy-MM-dd"));
@@ -63,32 +72,36 @@ public class ApplyController {
 		applyService.addApply(apply);
 		return "OK";
 	}
-	@RequestMapping(path = "/apply/get", method = RequestMethod.POST)
+	
+	
+	@RequestMapping(path = "/apply/get")
 	@ResponseBody
 	public String getApply(Model model,
-			 @RequestParam("user_id") int userId,
-             @RequestParam("period_name") String periodName,
+			 @RequestParam("userId") int userId,
+             @RequestParam(value = "periodName", required = false) String periodName,
              HttpServletRequest request,
              HttpServletResponse response) throws ParseException {
 		List<Apply> applies = applyService.selectByUserId(userId);
 		User user = userService.getUser(userId);
 		Map<String, Object> res = new HashMap<>();
-		res.put("user_id", user.getUserId());
+		res.put("userId", user.getUserId());
+		res.put("username", user.getUsername());
 		res.put("mail", user.getMail());
 		res.put("apply", applies);
-		return JSONObject.toJSONString(res);
+		String resStr = JSONObject.toJSONString(res);
+		return resStr;
 	}
 	
 	
-	@RequestMapping(path = "/apply/update", method = RequestMethod.POST)
+	@RequestMapping(path = "/apply/update")
 	@ResponseBody
-	public String addApply(Model model, 
-			 @RequestParam("user_id") int userId,
-			 @RequestParam(value = "apply_id") int applyId,
-             @RequestParam(value = "period_name", required = false) String periodName,
-             @RequestParam(value = "company_name", required = false) String companyName,
-             @RequestParam(value = "apply_date", required = false) String applyDate,
-             @RequestParam(value = "end_date", required = false) String endDate,
+	public String updateApply(Model model, 
+			 @RequestParam("userId") int userId,
+			 @RequestParam(value = "applyId") int applyId,
+             @RequestParam(value = "periodName", required = false) String periodName,
+             @RequestParam(value = "companyName", required = false) String companyName,
+             @RequestParam(value = "applyDate", required = false) String applyDate,
+             @RequestParam(value = "endDate", required = false) String endDate,
              @RequestParam(value = "recommend", required = false) String recommend,
              @RequestParam(value = "status", required = false) String status,
              @RequestParam(value = "anticipate", required = false) String anticipate,
@@ -110,27 +123,26 @@ public class ApplyController {
 		List<Apply> applies = applyService.selectByUserId(userId);
 		User user = userService.getUser(userId);
 		Map<String, Object> res = new HashMap<>();
-		res.put("user_id", user.getUserId());
+		res.put("userId", user.getUserId());
 		res.put("mail", user.getMail());
 		res.put("apply", applies);
 		return JSONObject.toJSONString(res);
 	}
 	
-	@RequestMapping(path = "/apply/remove", method = RequestMethod.POST)
+	@RequestMapping(path = "/apply/remove")
 	@ResponseBody
 	public String removeApply(Model model,
-			 @RequestParam("user_id") int userId,
-			 @RequestParam(value = "apply_id") int applyId,
+			 @RequestParam(value = "applyId") int applyId,
              HttpServletRequest request,
              HttpServletResponse response) throws ParseException {
 		applyService.deleteApply(applyId);
 		return "OK";
 	}
-	@RequestMapping(path = "/apply/removeList", method = RequestMethod.POST)
+	@RequestMapping(path = "/apply/removeList")
 	@ResponseBody
 	public String removeApplyList(Model model,
-			 @RequestParam("user_id") int userId,
-			 @RequestParam(value = "apply_ids") String applyIds,
+			 @RequestParam("userId") int userId,
+			 @RequestParam(value = "applyIds") String applyIds,
              HttpServletRequest request,
              HttpServletResponse response) throws ParseException {
 		List<Integer> idList = new ArrayList<>();

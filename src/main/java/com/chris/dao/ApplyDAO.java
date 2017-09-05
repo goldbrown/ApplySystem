@@ -16,12 +16,12 @@ import com.chris.model.Apply;
 public interface ApplyDAO {
 	
 	String TABLE_NAME = " apply ";
-	String INSERT_FIELD = " period_name, company_name, user_id, apply_date,"
+	String INSERT_FIELD = " period_name, company_name, user_id, username, apply_date,"
 			+ " end_date, recommend, status, anticipate, result ";
 	String SELECT_FIELD = " apply_id, " + INSERT_FIELD;
 	
 	@Insert({" insert into ", TABLE_NAME, " ( ", INSERT_FIELD,  " ) values ( ", 
-		"#{periodName}, #{companyName}, #{userId}, #{applyDate}, #{endDate}, #{recommend},"
+		"#{periodName}, #{companyName}, #{userId}, #{username}, #{applyDate}, #{endDate}, #{recommend},"
 		+ " #{status}, #{anticipate}, #{result})"})
 	public int addApply(Apply apply);
 	

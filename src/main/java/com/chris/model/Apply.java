@@ -7,6 +7,7 @@ public class Apply {
 	private String periodName;
 	private String companyName;
 	private int userId;
+	private String username;
 	private Date applyDate;
 	private Date endDate;
 	private String recommend;
@@ -72,6 +73,12 @@ public class Apply {
 	}
 	public void setResult(String result) {
 		this.result = result;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	
 	
