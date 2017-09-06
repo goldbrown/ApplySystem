@@ -28,8 +28,11 @@ public interface ApplyDAO {
 	@Select({"select ", SELECT_FIELD, " from ", TABLE_NAME, " where user_id = #{userId}"})
 	public List<Apply> selectByUserId(int userId);
 	
+	@Select({"select ", SELECT_FIELD, " from ", TABLE_NAME, " where username = #{username}"})
+	public List<Apply> selectByUsername(String username);
+	
 	@Update({"update ", TABLE_NAME, " set period_name = #{periodName}, company_name = #{companyName},"
-			+ "user_id = #{userId}, apply_date = #{applyDate}, end_date = #{applyDate},"
+			+ "apply_date = #{applyDate}, end_date = #{endDate},"
 			+ "recommend = #{recommend},"
 			+ "status = #{status}, anticipate = #{anticipate}, result = #{result} where apply_id = #{applyId}"})
 	public void updateApply(Apply apply);

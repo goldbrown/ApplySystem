@@ -20,6 +20,9 @@ public class ApplyService {
 	public List<Apply> selectByUserId(int userId) {
 		return applyDAO.selectByUserId(userId);
 	}
+	public List<Apply> selectByUsername(String username) {
+		return applyDAO.selectByUsername(username);
+	}
 	
 	public void updateApply(Apply apply) {
 		applyDAO.updateApply(apply);

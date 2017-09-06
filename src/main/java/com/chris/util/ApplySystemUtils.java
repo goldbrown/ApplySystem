@@ -12,7 +12,8 @@ import com.alibaba.fastjson.JSONObject;
 
 public class ApplySystemUtils {
 	 private static final Logger logger = LoggerFactory.getLogger(ApplySystemUtils.class);
-
+	 public static final int CODE_OK = 0;
+	 public static final int CODE_ERR = -1;
 	    public static String md5(String key) {
 	        try {
 	            MessageDigest md = MessageDigest.getInstance("MD5");
@@ -30,20 +31,20 @@ public class ApplySystemUtils {
 	    //Get json string
 	    public static String getJSONString(int code) {
 	        JSONObject json = new JSONObject();
-	        json.put("code", code);
+	        json.put("status", code);
 	        return json.toJSONString();
 	    }
 	    public static String getJSONString(int code, String msg) {
 	        JSONObject json = new JSONObject();
-	        json.put("code", code);
+	        json.put("status", code);
 	        json.put("msg", msg);
 	        return json.toJSONString();
 	    }
 	    public static String getJSONString(int code, Map<String, Object> map) {
 	        JSONObject json = new JSONObject();
-	        json.put("code", code);
+	        json.put("status", code);
 	        for (Map.Entry<String, Object> entry : map.entrySet()) {
-	            map.put(entry.getKey(), entry.getValue());
+	            json.put(entry.getKey(), entry.getValue());
 	        }
 	        return json.toJSONString();
 	    }
