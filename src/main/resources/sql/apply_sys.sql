@@ -34,7 +34,7 @@ CREATE TABLE `apply` (
   `anticipate` varchar(45) DEFAULT NULL,
   `result` varchar(45) DEFAULT NULL,
   `username` varchar(45) NOT NULL,
-  `website` varchar(50) DEFAULT NULL,
+  `website` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`apply_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
