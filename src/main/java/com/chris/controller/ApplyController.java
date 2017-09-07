@@ -57,9 +57,9 @@ public class ApplyController {
 		if(user == null) {
 			return ApplySystemUtils.getJSONString(ApplySystemUtils.CODE_ERR, "请登录后操作");
 		}
-		System.out.println(request.getContentType());
-		System.out.println(request.getCharacterEncoding());
-		System.out.println(request.getQueryString());
+//		System.out.println(request.getContentType());
+//		System.out.println(request.getCharacterEncoding());
+//		System.out.println(request.getQueryString());
 		Apply apply = new Apply();
 		apply.setUserId(user.getUserId());
 		apply.setUsername(user.getUsername());
