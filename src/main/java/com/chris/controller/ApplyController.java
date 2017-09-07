@@ -1,11 +1,7 @@
 package com.chris.controller;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,16 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -37,8 +27,8 @@ import com.chris.service.ApplyService;
 import com.chris.service.UserService;
 import com.chris.util.ApplySystemUtils;
 
-@CrossOrigin(origins = "http://localhost:8080")
-//@CrossOrigin
+//@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin
 @Controller
 public class ApplyController {
 	@Autowired
@@ -48,12 +38,12 @@ public class ApplyController {
 	@Autowired
 	private HostHolder hostHolder;
 	
-	@RequestMapping(path = "/apply/add")
+	@RequestMapping(path = "/apply/add") 
 	@ResponseBody
 	public String addApply(Model model, 
-			 @RequestParam(value = "userId") int userId,
              @RequestParam(value = "periodName", required = false) String periodName,
              @RequestParam("companyName") String companyName,
+             @RequestParam(value = "website", required = false) String website,
              @RequestParam("applyDate") String applyDate,
              @RequestParam(value = "endDate", required = false) String endDate,
              @RequestParam(value = "recommend", required = false) String recommend,
@@ -67,11 +57,15 @@ public class ApplyController {
 		if(user == null) {
 			return ApplySystemUtils.getJSONString(ApplySystemUtils.CODE_ERR, "请登录后操作");
 		}
+		System.out.println(request.getContentType());
+		System.out.println(request.getCharacterEncoding());
+		System.out.println(request.getQueryString());
 		Apply apply = new Apply();
-		apply.setUserId(Integer.valueOf(userId));
+		apply.setUserId(user.getUserId());
 		apply.setUsername(user.getUsername());
 		apply.setPeriodName(periodName);
 		apply.setCompanyName(companyName);
+		apply.setWebsite(website);
 		apply.setApplyDate(DateUtils.parseDate(applyDate, "yyyy-MM-dd"));
 		if(endDate != null) {
 			apply.setEndDate(DateUtils.parseDate(endDate, "yyyy-MM-dd"));
@@ -80,8 +74,13 @@ public class ApplyController {
 		apply.setStatus(status);
 		apply.setAnticipate(anticipate);
 		apply.setResult(result);
-		applyService.addApply(apply);
-		return "OK";
+		
+		try {
+			applyService.addApply(apply);
+			return ApplySystemUtils.getJSONString(ApplySystemUtils.CODE_OK, "添加成功");
+		} catch(Exception e) {
+			return ApplySystemUtils.getJSONString(ApplySystemUtils.CODE_ERR, "添加失败");
+		}	
 	}
 	
 	
@@ -115,6 +114,7 @@ public class ApplyController {
 			 @RequestParam(value = "applyId") int applyId,
              @RequestParam(value = "periodName", required = false) String periodName,
              @RequestParam(value = "companyName", required = false) String companyName,
+             @RequestParam(value = "website", required = false) String website,
              @RequestParam(value = "applyDate", required = false) String applyDate,
              @RequestParam(value = "endDate", required = false) String endDate,
              @RequestParam(value = "recommend", required = false) String recommend,
@@ -131,6 +131,7 @@ public class ApplyController {
 		Apply apply = new Apply();
 		apply.setApplyId(applyId);
 		if(periodName != null) apply.setPeriodName(periodName);
+		if(website != null) apply.setWebsite(website);
 		if(companyName != null) apply.setCompanyName(companyName);
 		if(applyDate != null) apply.setApplyDate(DateUtils.parseDate(applyDate,"yyyy-MM-dd"));
 		if(endDate != null) apply.setEndDate(DateUtils.parseDate(endDate,"yyyy-MM-dd"));

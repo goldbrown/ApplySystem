@@ -1,6 +1,5 @@
 package com.chris.controller;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -15,16 +14,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.chris.service.UserService;
 import com.chris.util.ApplySystemUtils;
 
-//@CrossOrigin
+
 @CrossOrigin
+//@CrossOrigin
 @Controller
 public class LoginController {
 	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
@@ -93,10 +91,11 @@ public class LoginController {
     }
 	
 	@RequestMapping(value = "/logout")
+	@ResponseBody
     public String logout(@CookieValue("ticket") String ticket) {
 		try {
 			userService.logout(ticket);
-//	        System.out.println("成功退出");
+	        System.out.println("成功退出");
 	        return ApplySystemUtils.getJSONString(ApplySystemUtils.CODE_OK, "成功退出");
 		} catch(Exception e) {
 			logger.error("退出失败" + e);

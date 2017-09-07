@@ -5,6 +5,7 @@ import java.util.Date;
 public class Apply {
 	private int applyId;
 	private String periodName;
+	private String website;
 	private String companyName;
 	private int userId;
 	private String username;
@@ -79,6 +80,12 @@ public class Apply {
 	}
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	public String getWebsite() {
+		return website;
+	}
+	public void setWebsite(String website) {
+		this.website = website;
 	}
 	
 	
