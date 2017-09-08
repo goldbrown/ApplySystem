@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.chris.model.User;
 import com.chris.service.UserService;
 import com.chris.util.ApplySystemUtils;
 
@@ -62,6 +63,20 @@ public class LoginController {
             return ApplySystemUtils.getJSONString(ApplySystemUtils.CODE_ERR, "注册异常");
         }
     }
+	
+	@RequestMapping(value = "/username/exist")
+	@ResponseBody
+	public String usernameExist(Model model,
+			@RequestParam("username") String username,
+            HttpServletRequest request,
+            HttpServletResponse response) {
+		User user = userService.getUserByUsername(username);
+		if(user != null) {
+			return ApplySystemUtils.getJSONString(ApplySystemUtils.CODE_ERR, "用户名被占用");
+		} else {
+			return ApplySystemUtils.getJSONString(ApplySystemUtils.CODE_OK, "用户名没有占用");
+		}
+	}
 	
 	@RequestMapping(value = "/login")
 	@ResponseBody
