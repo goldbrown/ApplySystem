@@ -11,7 +11,7 @@ public class Apply {
 	private String username;
 	private Date applyDate;
 	private Date endDate;
-	private String recommend;
+	private String remark;
 	private String status;
 	private String anticipate;
 	private String result;
@@ -51,12 +51,7 @@ public class Apply {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-	public String getRecommend() {
-		return recommend;
-	}
-	public void setRecommend(String recommend) {
-		this.recommend = recommend;
-	}
+	
 	public String getStatus() {
 		return status;
 	}
@@ -86,6 +81,12 @@ public class Apply {
 	}
 	public void setWebsite(String website) {
 		this.website = website;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 	
 	

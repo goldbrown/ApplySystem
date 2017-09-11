@@ -46,7 +46,7 @@ public class ApplyController {
              @RequestParam(value = "website", required = false) String website,
              @RequestParam("applyDate") String applyDate,
              @RequestParam(value = "endDate", required = false) String endDate,
-             @RequestParam(value = "recommend", required = false) String recommend,
+             @RequestParam(value = "remark", required = false) String remark,
              @RequestParam("status") String status,
              @RequestParam(value = "anticipate", required = false) String anticipate,
              @RequestParam(value = "result", required = false) String result,
@@ -70,7 +70,7 @@ public class ApplyController {
 		if(endDate != null) {
 			apply.setEndDate(DateUtils.parseDate(endDate, "yyyy-MM-dd"));
 		}
-		apply.setRecommend(recommend);
+		apply.setRemark(remark);
 		apply.setStatus(status);
 		apply.setAnticipate(anticipate);
 		apply.setResult(result);
@@ -117,7 +117,7 @@ public class ApplyController {
              @RequestParam(value = "website", required = false) String website,
              @RequestParam(value = "applyDate", required = false) String applyDate,
              @RequestParam(value = "endDate", required = false) String endDate,
-             @RequestParam(value = "recommend", required = false) String recommend,
+             @RequestParam(value = "remark", required = false) String remark,
              @RequestParam(value = "status", required = false) String status,
              @RequestParam(value = "anticipate", required = false) String anticipate,
              @RequestParam(value = "result", required = false) String result,
@@ -130,15 +130,18 @@ public class ApplyController {
 		}
 		Apply apply = new Apply();
 		apply.setApplyId(applyId);
-		if(periodName != null) apply.setPeriodName(periodName);
-		if(website != null) apply.setWebsite(website);
-		if(companyName != null) apply.setCompanyName(companyName);
-		if(applyDate != null) apply.setApplyDate(DateUtils.parseDate(applyDate,"yyyy-MM-dd"));
-		if(endDate != null) apply.setEndDate(DateUtils.parseDate(endDate,"yyyy-MM-dd"));
-		if(recommend != null) apply.setRecommend(recommend);
-		if(status != null) apply.setStatus(status);
-		if(anticipate != null) apply.setAnticipate(anticipate);
-		if(result != null) apply.setResult(result);
+		//是否要判断为空???
+		apply.setPeriodName(periodName);
+		apply.setWebsite(website);
+		apply.setCompanyName(companyName);
+		if(StringUtils.isNotEmpty(applyDate)) apply.setApplyDate(DateUtils.parseDate(applyDate,"yyyy-MM-dd"));
+		else apply.setApplyDate(null);
+		if(StringUtils.isNotEmpty(endDate)) apply.setEndDate(DateUtils.parseDate(endDate,"yyyy-MM-dd"));
+		else apply.setEndDate(null);
+		apply.setRemark(remark);
+		apply.setStatus(status);
+		apply.setAnticipate(anticipate);
+		apply.setResult(result);
 		applyService.updateApply(apply);
 		
 		List<Apply> applies = applyService.selectByUserId(user.getUserId());

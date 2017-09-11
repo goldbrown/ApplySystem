@@ -17,11 +17,11 @@ public interface ApplyDAO {
 	
 	String TABLE_NAME = " apply ";
 	String INSERT_FIELD = " period_name, company_name, website, user_id, username, apply_date,"
-			+ " end_date, recommend, status, anticipate, result ";
+			+ " end_date, remark, status, anticipate, result ";
 	String SELECT_FIELD = " apply_id, " + INSERT_FIELD;
 	
 	@Insert({" insert into ", TABLE_NAME, " ( ", INSERT_FIELD,  " ) values ( ", 
-		"#{periodName}, #{companyName}, #{website}, #{userId}, #{username}, #{applyDate}, #{endDate}, #{recommend},"
+		"#{periodName}, #{companyName}, #{website}, #{userId}, #{username}, #{applyDate}, #{endDate}, #{remark},"
 		+ " #{status}, #{anticipate}, #{result})"})
 	public int addApply(Apply apply);
 	
@@ -33,7 +33,7 @@ public interface ApplyDAO {
 	
 	@Update({"update ", TABLE_NAME, " set period_name = #{periodName}, company_name = #{companyName},"
 			+ " website = #{website}, apply_date = #{applyDate}, end_date = #{endDate},"
-			+ "recommend = #{recommend},"
+			+ "remark = #{remark},"
 			+ "status = #{status}, anticipate = #{anticipate}, result = #{result} where apply_id = #{applyId}"})
 	public void updateApply(Apply apply);
 	
