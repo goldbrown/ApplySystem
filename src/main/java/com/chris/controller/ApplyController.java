@@ -1,5 +1,10 @@
 package com.chris.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,6 +34,7 @@ import com.chris.model.User;
 import com.chris.service.ApplyService;
 import com.chris.service.UserService;
 import com.chris.util.ApplySystemUtils;
+import com.opencsv.CSVWriter;
 
 //@CrossOrigin(origins = "http://localhost:8080")
 @CrossOrigin
@@ -105,6 +114,27 @@ public class ApplyController {
 		String resStr = JSONObject.toJSONString(res);
 		return resStr;
 	}
+	@RequestMapping(path = "/apply/download", produces = "text/csv")
+	public String downloadApply(Model model,
+             @RequestParam(value = "periodName", required = false) String periodName,
+             HttpServletRequest request,
+             HttpServletResponse response) throws ParseException, IOException {
+		User user = hostHolder.getUser();
+		//判断用户是否登录
+		if(user == null) {
+			return ApplySystemUtils.getJSONString(ApplySystemUtils.CODE_ERR, "请登录后操作");
+		}
+		int userId = user.getUserId();
+		List<String[]> applies = applyService.getApplyStrByUserId(userId);
+		
+		// write csv to response
+		response.setCharacterEncoding("GBK");  //考虑到大多数人使用windows系统，设置中文编码环境
+		CSVWriter csvWriter = new CSVWriter(response.getWriter(), ',');
+		csvWriter.writeAll(applies);
+		csvWriter.close();
+		return ApplySystemUtils.getJSONString(ApplySystemUtils.CODE_OK, "导出数据成功");
+	}
+	
 	
 	
 	
